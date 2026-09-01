@@ -1,43 +1,42 @@
-# Titanic Data Quality Checks Project
+# Titanic Data Quality Validations
 
-This repository contains a Jupyter Notebook (`data_quality_checks.ipynb`) dedicated to loading, modifying, and performing rigorous data quality validations on the Titanic dataset[cite: 1]. The notebook acts as a step-by-step guide to identifying common data anomalies such as missing values, incorrect data types, and formatting inconsistencies[cite: 1].
+This project contains a Jupyter Notebook designed to execute comprehensive data quality checks on a subset of the Titanic dataset[cite: 2]. The notebook outlines a structured workflow for identifying and handling common data anomalies, including missing values, type mismatches, string inconsistencies, and non-informative columns[cite: 2].
 
-## Repository Contents
+## Repository Content
 
-*   `data_quality_checks.ipynb`: The main notebook containing all executable Python code[cite: 1].
-*   `titanic_dataset.csv`: The primary dataset required to run the analysis (must be located in the same directory as the notebook)[cite: 1].
-*   `requirements.txt`: The required Python packages for this project.
+*   **Notebook (`data_quality_checks.ipynb`)**: The primary Python script containing the step-by-step data validation workflow[cite: 2].
+*   **Dataset (`titanic_dataset.csv`)**: The source data utilized for the analysis[cite: 2].
 
-## Step-by-Step Notebook Breakdown
+## Step-by-Step Workflow
 
-The `data_quality_checks.ipynb` notebook is structured into four primary sections[cite: 1]:
+### 1. Set Up & Initialization
+*   Installs and upgrades `pip`, followed by the installation of the core analytical packages `pandas` and `numpy`[cite: 2].
+*   Imports the libraries and sets the pandas display option to show a maximum of 50 columns[cite: 2].
 
-### 1. Set Up
-*   Installs the required Python packages (`pandas` and `numpy`) and upgrades `pip` via magic commands[cite: 1].
-*   Imports the libraries and configures `pandas` to display a maximum of 50 columns to improve data readability[cite: 1].
+### 2. Loading the Dataset
+*   Loads `titanic_dataset.csv` into a pandas DataFrame[cite: 2].
+*   Validates the initial dimensions of the dataset, resulting in 782 rows and 15 columns[cite: 2].
+*   Executes preliminary exploratory commands including `.head()`, `.shape`, `.info()`, `.describe()`, and `.tail()` to understand the initial state of the data[cite: 2].
 
-### 2. Load the Dataset
-*   Loads the `titanic_dataset.csv` into a pandas DataFrame[cite: 1].
-*   Performs initial exploratory data analysis (EDA) by checking the DataFrame's dimensions (782 rows, 15 columns), previewing the first and last five rows, checking non-null counts via `.info()`, and generating basic descriptive statistics using `.describe()`[cite: 1].
+### 3. Simulating Data Issues
+To demonstrate robust data cleaning techniques, the notebook intentionally introduces several problematic columns[cite: 2]:
+*   **Unique ID:** Generates a synthetic `passenger_id` column using a sequential numpy array[cite: 2].
+*   **Constant Column:** Creates a `constant_column` where all rows are assigned the exact same integer value of 1[cite: 2].
+*   **Dirty Strings:** Copies the `embark_town` column into a new `embark_town_dirty` column and applies destructive transformations to a sample of rows, including uppercase conversion, trailing/leading whitespaces, and hardcoded "unknown" strings[cite: 2].
 
-### 3. Adding Columns for Demonstrating Data Issues
-This section deliberately injects "dirty" data to simulate real-world data engineering scenarios[cite: 1]:
-*   **Dirty Categoricals:** Creates a new column named `embark_town_dirty`[cite: 1]. It samples 6 non-missing rows and applies problematic transformations: converting strings to uppercase, injecting leading and trailing whitespaces, and replacing values with the string "unknown"[cite: 1].
-*   **Unique Identifiers:** Generates a synthetic `passenger_id` column using a sequential `numpy` array from 1 to the total length of the dataset[cite: 1].
-*   **Constant Columns:** Injects a `constant_column` where every row contains the exact same integer value (`1`)[cite: 1].
+### 4. Comprehensive Data Validations
+The core of the notebook focuses on systematically identifying data issues[cite: 2]:
 
-### 4. Data Quality Validations
-The core of the notebook focuses on executing data quality checks[cite: 1]:
+*   **4.1 Basic Overview:** Retrieves the expanded shape (18 columns) and calculates unique counts and descriptive statistics across the entire DataFrame[cite: 2].
+*   **4.2 Missing Values Summary:** Computes the total count and percentage of missing values (NaNs) for every column, compiling the results into a dedicated Summary DataFrame[cite: 2].
+*   **4.3 Duplicates Check:** Evaluates the dataset for completely duplicated rows, confirming 0 duplicate records[cite: 2].
+*   **4.4 Data Type Validations:** Defines an expected schema dictionary and programmatically compares it against actual DataFrame types[cite: 2]. It successfully identifies type mismatches (e.g., `sex` loaded as string instead of category) and casts `pclass` to an `int64` type[cite: 2].
+*   **4.5 Constant and Quasi-Constant Columns:** Identifies columns with zero variance (`constant_column`) by checking if the unique count equals 1[cite: 2]. It also includes logic to flag quasi-constant columns where a single value constitutes more than 95% of the data[cite: 2].
+*   **4.6 1D-Like Columns:** Scans for columns where the number of unique values matches the total number of rows in the DataFrame, accurately flagging the simulated `passenger_id` column[cite: 2].
+*   **4.7 String Inconsistencies:** Selects all string columns and resolves the injected messiness[cite: 2]. It creates a cleaned version (`embark_town_clean`) by stripping whitespace, standardizing to lowercase, and replacing the string "unknown" with `np.nan`[cite: 2].
+*   **4.8 High Null Columns:** Filters the missing values summary to flag any feature missing more than 40% of its data, which correctly isolates the `deck` column at ~76.9% missing[cite: 2].
+*   **4.9 High Zero Columns (Numeric):** Calculates the proportion of absolute zero values across all numerical columns[cite: 2]. It highlights features like `parch` (~76.7% zeros) and `sibsp` (~67.6% zeros)[cite: 2].
 
-*   **4.1 Basic Dataset Overview:** Retrieves the new DataFrame shape (now 18 columns) and calculates the number of unique values for every column using `.nunique()`[cite: 1]. It also generates a comprehensive statistical summary covering both categorical and numerical columns[cite: 1].
-*   **4.2 Missing Values Summary:** Computes the total count and the exact percentage of missing values (NaNs) for each feature[cite: 1]. The results are compiled into a separate, sorted Summary DataFrame highlighting columns with the highest missing data rates (e.g., `deck` and `age`)[cite: 1].
-*   **4.3 Duplicates:** Scans the dataset for perfectly duplicated rows, outputting a count (yielding 0 duplicates in this dataset)[cite: 1].
-*   **4.4 Data Type Validations:** Compares the actual `pandas` data types against a predefined schema dictionary (`expected_types`)[cite: 1]. The schema expects columns like `sex` and `embark_town` to be `category` types, and `age` to be `float64`[cite: 1]. It includes type coercion steps, such as casting the `pclass` column to `int64`[cite: 1].
-*   **4.5 Constant and Quasi-Constant Columns:** Programmatically searches the DataFrame for columns that provide no variance[cite: 1]. By checking if `nunique == 1`, it successfully flags the artificially created `constant_column`[cite: 1]. It also begins setting up logic to detect quasi-constant columns by inspecting frequency counts[cite: 1].
-
-## Usage
-
-1. Ensure Python 3 is installed.
-2. Install the required dependencies using the command: `pip install -r requirements.txt`
-3. Place `titanic_dataset.csv` in the root directory.
-4. Execute `data_quality_checks.ipynb` sequentially from top to bottom.
+## Usage Requirements
+*   Python 3 environment capable of running Jupyter Notebooks[cite: 2].
+*   Required packages: `numpy` and `pandas`[cite: 2].
