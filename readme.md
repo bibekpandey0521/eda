@@ -1,3 +1,19 @@
+# Titanic Data Quality Checks
+
+This repository contains a Jupyter Notebook designed to perform comprehensive data quality checks and data cleaning on the Titanic dataset.
+
+## Repository Contents
+
+*   `data_quality_checks_2.ipynb`: The primary Jupyter Notebook containing all data validation and cleaning steps.
+*   `titanic_dataset.csv`: The dataset used for analysis, containing 782 rows and 15 initial columns.
+*   `requirements.txt`: Python package dependencies.
+
+## Setup and Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
 # Titanic Data Quality Validations
 
 This project contains a Jupyter Notebook designed to execute comprehensive data quality checks on a subset of the Titanic dataset[cite: 2]. The notebook outlines a structured workflow for identifying and handling common data anomalies, including missing values, type mismatches, string inconsistencies, and non-informative columns[cite: 2].
