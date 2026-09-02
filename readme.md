@@ -12,8 +12,8 @@ This repository contains a Jupyter Notebook designed to perform comprehensive da
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/bibekpandey0521/eda.git
+
 # Titanic Data Quality Validations
 
 This project contains a Jupyter Notebook designed to execute comprehensive data quality checks on a subset of the Titanic dataset[cite: 2]. The notebook outlines a structured workflow for identifying and handling common data anomalies, including missing values, type mismatches, string inconsistencies, and non-informative columns[cite: 2].
